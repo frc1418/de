@@ -14,7 +14,14 @@ RESET="\e[0m"
 function task { printf "${CYAN}$1... ${RESET}"; }
 function succ { printf "${GREEN}success.${RESET}\n"; }
 function warn { printf "${YELLOW}Warning: $1${RESET}\n" >&2; }
-function fail { printf "${RED}failed.${RESET}\n" >&2; exit 1; }
+function fail {
+    if [ "$1" = "" ]; then
+        printf "${RED}failed.${RESET}\n" >&2
+    else
+        printf "${RED}$1${RESET}\n" >&2
+    fi
+    exit 1
+}
 
 # Default options
 reconnect=false
