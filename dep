@@ -59,6 +59,13 @@ function connect {
     if [ -z "$(networksetup -setairportnetwork en0 $1 $2)" ]; then succ; else fail; fi
 }
 
+if $ethernet; then
+    task "Pinging RoboRIO"
+    ping -c 1 -t 1 10.14.18.2 >/dev/null
+    if [ $? = 0 ]; then
+        fail
+    fi
+fi
 connect $robot_network $DEPLOY_ROBOT_NETWORK_PSK
 python3 robot/robot.py deploy
 if $reconnect; then connect $start_network $DEPLOY_START_NETWORK_PSK; fi
