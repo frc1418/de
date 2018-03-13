@@ -18,6 +18,10 @@ MANPAGE=$(SCRIPT).7
 all:
 	@echo did nothing. try targets: install, or uninstall.
 
+link:
+	ln -s $(shell pwd)/$(SCRIPT) $(INSTBIN)/$(SCRIPT)
+	ln -s $(shell pwd)/doc/$(MANPAGE) $(INSTMAN)/$(MANPAGE)
+
 install:
 	test -d $(INSTDIR) || mkdir -p $(INSTDIR)
 	test -d $(INSTBIN) || mkdir -p $(INSTBIN)
