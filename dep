@@ -31,13 +31,13 @@ tests=true
 # Parse flags
 while :; do
     case "$1" in
-    -r)
+    --reconnect|-r)
         reconnect=true
         ;;
-    -w)
+    --wifi|-w)
         ethernet=false
         ;;
-    -s)
+    --skip-tests|-s)
         tests=false
         ;;
     *)
