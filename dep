@@ -50,6 +50,9 @@ if [ -z "$DEPLOY_ROBOT_NETWORK_PSK" ]; then warn "\$DEPLOY_ROBOT_NETWORK_PSK not
 start_network=$(networksetup -getairportnetwork en0 | cut -d ' ' -f 4)
 robot_network=1418
 
+cur_ip=$(ifconfig | grep -Eo 'inet (addr:)?([0-9]*\.){3}[0-9]*' | grep -Eo '([0-9]*\.){3}[0-9]*' | grep -v '127.0.0.1')
+rio_ip=$(cut -d '.' -f1-3 <<< $cur_ip).2
+
 function connect {
     if $ethernet; then return; fi
     if [ $start_network = $robot_network ]; then return; fi
@@ -61,10 +64,8 @@ function connect {
 
 if $ethernet; then
     task "Pinging RoboRIO"
-    ping -c 1 -t 1 10.14.18.2 >/dev/null
-    if [ $? = 0 ]; then
-        fail
-    fi
+    ping -c 1 -t 1 $rio_ip >/dev/null
+    if [ $? = 0 ]; then fail; else succ; fi
 fi
 connect $robot_network $DEPLOY_ROBOT_NETWORK_PSK
 python3 robot/robot.py deploy
