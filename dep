@@ -63,7 +63,7 @@ function connect {
 }
 
 if $ethernet; then
-    task "Pinging RoboRIO"
+    task "Pinging RoboRIO at $rio_ip"
     ping -c 1 -t 1 $rio_ip >/dev/null
     if [ $? = 0 ]; then fail; else succ; fi
 fi
