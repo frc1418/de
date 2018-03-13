@@ -29,18 +29,22 @@ if ifconfig en3 >/dev/null 2>&1; then ethernet=true; else ethernet=false; fi
 tests=true
 
 # Parse flags
-while getopts "rwt" opt; do
-    case "$opt" in
-    r)
+while :; do
+    case "$1" in
+    -r)
         reconnect=true
         ;;
-    w)
+    -w)
         ethernet=false
         ;;
-    s)
+    -s)
         tests=false
         ;;
+    *)
+        break
     esac
+
+    shift
 done
 
 if [ -n "$(git status --porcelain)" ]; then
