@@ -26,15 +26,19 @@ function fail {
 # Default options
 reconnect=false
 if ifconfig en3 >/dev/null 2>&1; then ethernet=true; else ethernet=false; fi
+tests=true
 
 # Parse flags
-while getopts "rw" opt; do
+while getopts "rwt" opt; do
     case "$opt" in
     r)
         reconnect=true
         ;;
     w)
         ethernet=false
+        ;;
+    s)
+        tests=false
         ;;
     esac
 done
@@ -68,5 +72,9 @@ if $ethernet; then
     if [ $? = 0 ]; then fail; else succ; fi
 fi
 connect $robot_network $DEPLOY_ROBOT_NETWORK_PSK
-python3 robot/robot.py deploy
+if $tests; then
+    python3 robot/robot.py deploy
+else
+    python3 robot/robot.py deploy --skip-tests
+fi
 if $reconnect; then connect $start_network $DEPLOY_START_NETWORK_PSK; fi
