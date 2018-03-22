@@ -73,7 +73,7 @@ function connect {
 if $ethernet; then
     task "Pinging RoboRIO at $rio_ip"
     ping -c 1 -t 1 $rio_ip >/dev/null
-    if [ $? = 0 ]; then fail; else succ; fi
+    if [ $? = 0 ]; then succ; else fail; fi
 fi
 connect $robot_network $DEPLOY_ROBOT_NETWORK_PSK
 if $tests; then
