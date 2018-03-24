@@ -1,8 +1,8 @@
 #!/usr/bin/env bash
 
 # You should set the following environment variables:
-#   $DEPLOY_START_NETWORK_PSK: Password/PSK of your current network
-#   $DEPLOY_ROBOT_NETWORK_PSK: ...of your robot network
+#   $DEP_START_NETWORK_PSK: Password/PSK of your current network
+#   $DEP_ROBOT_NETWORK_PSK: ...of your robot network
 
 RED="\e[31m"
 CYAN="\e[36m"
@@ -52,8 +52,8 @@ if [ -n "$(git status --porcelain)" ]; then
     git status --short
 fi
 
-if [ -z "$DEPLOY_START_NETWORK_PSK" ]; then warn "\$DEPLOY_START_NETWORK_PSK not set."; fi
-if [ -z "$DEPLOY_ROBOT_NETWORK_PSK" ]; then warn "\$DEPLOY_ROBOT_NETWORK_PSK not set."; fi
+if [ -z "$DEP_START_NETWORK_PSK" ]; then warn "\$DEP_START_NETWORK_PSK not set."; fi
+if [ -z "$DEP_ROBOT_NETWORK_PSK" ]; then warn "\$DEP_ROBOT_NETWORK_PSK not set."; fi
 
 start_network=$(networksetup -getairportnetwork en0 | cut -d ' ' -f 4)
 robot_network=1418
@@ -75,10 +75,10 @@ if $ethernet; then
     ping -c 1 -t 1 $rio_ip >/dev/null
     if [ $? = 0 ]; then succ; else fail; fi
 fi
-connect $robot_network $DEPLOY_ROBOT_NETWORK_PSK
+connect $robot_network $DEP_ROBOT_NETWORK_PSK
 if $tests; then
     python3 robot/robot.py deploy
 else
     python3 robot/robot.py deploy --skip-tests
 fi
-if $reconnect; then connect $start_network $DEPLOY_START_NETWORK_PSK; fi
+if $reconnect; then connect $start_network $DEP_START_NETWORK_PSK; fi
