@@ -3,6 +3,7 @@
 # You should set the following environment variables:
 #   $DEP_START_NETWORK_PSK: Password/PSK of your current network
 #   $DEP_ROBOT_NETWORK_PSK: ...of your robot network
+#   $DEP_ROBOT_NETWORK_SSID: The SSID of your robot's network
 
 RED="\e[31m"
 CYAN="\e[36m"
@@ -54,9 +55,10 @@ fi
 
 if [ -z "$DEP_START_NETWORK_PSK" ]; then warn "\$DEP_START_NETWORK_PSK not set."; fi
 if [ -z "$DEP_ROBOT_NETWORK_PSK" ]; then warn "\$DEP_ROBOT_NETWORK_PSK not set."; fi
+if [ -z "$DEP_ROBOT_NETWORK_SSID" ]; then warn "\$DEP_ROBOT_NETWORK_SSID not set."; fi
 
 start_network=$(networksetup -getairportnetwork en0 | cut -d ' ' -f 4)
-robot_network=1418
+robot_network=$DEP_ROBOT_NETWORK_SSID
 
 cur_ip=$(ifconfig | grep -Eo 'inet (addr:)?([0-9]*\.){3}[0-9]*' | grep -Eo '([0-9]*\.){3}[0-9]*' | grep -v '127.0.0.1')
 rio_ip=$(cut -d '.' -f1-3 <<< $cur_ip).2
