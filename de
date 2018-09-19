@@ -30,6 +30,10 @@ reconnect=false
 if ifconfig en3 &>/dev/null; then ethernet=true; else ethernet=false; fi
 tests=true
 
+# Run config script
+if [ ! -f ~/.dep ]; then touch ~/.dep; fi
+source ~/.dep
+
 # Parse flags
 while :; do
     case "$1" in
