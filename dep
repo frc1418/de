@@ -26,7 +26,7 @@ function fail {
 
 # Default options
 reconnect=false
-if ifconfig en3 >/dev/null 2>&1; then ethernet=true; else ethernet=false; fi
+if ifconfig en3 &>/dev/null; then ethernet=true; else ethernet=false; fi
 tests=true
 
 # Parse flags
