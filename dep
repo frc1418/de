@@ -1,9 +1,9 @@
 #!/usr/bin/env bash
 
 # You should set the following environment variables:
-#   $DEP_START_NETWORK_PSK: Password/PSK of your current network
-#   $DEP_ROBOT_NETWORK_PSK: ...of your robot network
-#   $DEP_ROBOT_NETWORK_SSID: The SSID of your robot's network
+#   $DE_START_NETWORK_PSK: Password/PSK of your current network
+#   $DE_ROBOT_NETWORK_PSK: ...of your robot network
+#   $DE_ROBOT_NETWORK_SSID: The SSID of your robot's network
 
 RED="\e[31m"
 CYAN="\e[36m"
@@ -53,12 +53,12 @@ if [ -n "$(git status --porcelain)" ]; then
     git status --short
 fi
 
-if [ -z "$DEP_START_NETWORK_PSK" ]; then warn "\$DEP_START_NETWORK_PSK not set."; fi
-if [ -z "$DEP_ROBOT_NETWORK_PSK" ]; then warn "\$DEP_ROBOT_NETWORK_PSK not set."; fi
-if [ -z "$DEP_ROBOT_NETWORK_SSID" ]; then warn "\$DEP_ROBOT_NETWORK_SSID not set."; fi
+if [ -z "$DE_START_NETWORK_PSK" ]; then warn "\$DE_START_NETWORK_PSK not set."; fi
+if [ -z "$DE_ROBOT_NETWORK_PSK" ]; then warn "\$DE_ROBOT_NETWORK_PSK not set."; fi
+if [ -z "$DE_ROBOT_NETWORK_SSID" ]; then warn "\$DE_ROBOT_NETWORK_SSID not set."; fi
 
 start_network=$(networksetup -getairportnetwork en0 | cut -d ' ' -f 4)
-robot_network=$DEP_ROBOT_NETWORK_SSID
+robot_network=$DE_ROBOT_NETWORK_SSID
 
 cur_ip=$(ifconfig | grep -Eo 'inet (addr:)?([0-9]*\.){3}[0-9]*' | grep -Eo '([0-9]*\.){3}[0-9]*' | grep -v '127.0.0.1')
 rio_ip=$(cut -d '.' -f1-3 <<< $cur_ip).2
@@ -77,10 +77,10 @@ if $ethernet; then
     ping -c 1 -t 1 $rio_ip >/dev/null
     if [ $? = 0 ]; then succ; else fail; fi
 fi
-connect $robot_network $DEP_ROBOT_NETWORK_PSK
+connect $robot_network $DE_ROBOT_NETWORK_PSK
 if $tests; then
     python3 robot/robot.py deploy
 else
     python3 robot/robot.py deploy --skip-tests
 fi
-if $reconnect; then connect $start_network $DEP_START_NETWORK_PSK; fi
+if $reconnect; then connect $start_network $DE_START_NETWORK_PSK; fi
