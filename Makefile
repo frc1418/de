@@ -12,7 +12,7 @@ ifeq ($(detected_OS),Darwin)
     INSTMAN=$(INSTDIR)/local/share/man/man7
 endif
 
-SCRIPT=dep
+SCRIPT=de
 MANPAGE=$(SCRIPT).7
 
 all:
