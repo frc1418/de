@@ -16,7 +16,7 @@ function task { printf "${CYAN}$1... ${RESET}"; }
 function succ { printf "${GREEN}success.${RESET}\n"; }
 function warn { printf "${YELLOW}Warning: $1${RESET}\n" >&2; }
 function fail {
-    if [ "$1" = "" ]; then
+    if [[ "$1" = "" ]]; then
         printf "${RED}failed.${RESET}\n" >&2
     else
         printf "${RED}$1${RESET}\n" >&2
@@ -48,14 +48,14 @@ while :; do
     shift
 done
 
-if [ -n "$(git status --porcelain)" ]; then
+if [[ -n "$(git status --porcelain)" ]]; then
     warn "You have uncommitted changes!"
     git status --short
 fi
 
-if [ -z "$DE_START_NETWORK_PSK" ]; then warn "\$DE_START_NETWORK_PSK not set."; fi
-if [ -z "$DE_ROBOT_NETWORK_PSK" ]; then warn "\$DE_ROBOT_NETWORK_PSK not set."; fi
-if [ -z "$DE_ROBOT_NETWORK_SSID" ]; then warn "\$DE_ROBOT_NETWORK_SSID not set."; fi
+if [[ -z "$DE_START_NETWORK_PSK" ]]; then warn "\$DE_START_NETWORK_PSK not set."; fi
+if [[ -z "$DE_ROBOT_NETWORK_PSK" ]]; then warn "\$DE_ROBOT_NETWORK_PSK not set."; fi
+if [[ -z "$DE_ROBOT_NETWORK_SSID" ]]; then warn "\$DE_ROBOT_NETWORK_SSID not set."; fi
 
 start_network=$(networksetup -getairportnetwork en0 | cut -d ' ' -f 4)
 robot_network=$DE_ROBOT_NETWORK_SSID
@@ -65,11 +65,11 @@ rio_ip=$(cut -d '.' -f1-3 <<< $cur_ip).2
 
 function connect {
     if $ethernet; then return; fi
-    if [ $start_network = $robot_network ]; then return; fi
+    if [[ $start_network = $robot_network ]]; then return; fi
     task "Connecting to $1"
     # Even when networksetup fails, exit status will bizarrely be 0.
     # Thus, consider no output success.
-    if [ -z "$(networksetup -setairportnetwork en0 $1 $2)" ]; then succ; else fail; fi
+    if [[ -z "$(networksetup -setairportnetwork en0 $1 $2)" ]]; then succ; else fail; fi
 }
 
 if $ethernet; then
