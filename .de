@@ -1,5 +1,0 @@
-# You should set the following environment variables:
-
-DE_START_NETWORK_PSK="" # Password/PSK of your current network
-DE_ROBOT_NETWORK_PSK="" # ...of your robot network
-DE_ROBOT_NETWORK_PSK="" # The SSID of your robot's network

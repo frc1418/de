@@ -1,5 +1,4 @@
 #!/usr/bin/env bash
-source ~/.de
 
 RED="\e[31m"
 CYAN="\e[36m"
