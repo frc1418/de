@@ -1,5 +1,11 @@
 #!/usr/bin/env bash
 
+if [ ! -f ~/.de ]; then
+  echo "Error! File not found!"
+else:
+  source ~/.de
+fi
+
 RED="\e[31m"
 CYAN="\e[36m"
 YELLOW="\e[33m"
