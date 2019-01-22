@@ -19,7 +19,11 @@ function fail {
     exit 1
 }
 
-if [ ! -f ~/.de ]; then fail; else source ~/.de; fi
+if [ ! -f ~/.de ]; then
+    fail "No config found."
+else
+    source ~/.de
+fi
 
 # Default options
 reconnect=false
