@@ -19,12 +19,8 @@ function fail {
     exit 1
 }
 
-if [ ! -f ~/.de ]
-then
-    fail
-else:
-    source ~/.de
-fi
+if [ ! -f ~/.de ]; then fail; else source ~/.de; fi
+
 # Default options
 reconnect=false
 if ifconfig en3 &>/dev/null; then ethernet=true; else ethernet=false; fi
