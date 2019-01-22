@@ -1,11 +1,5 @@
 #!/usr/bin/env bash
 
-if [ ! -f ~/.de ]; then
-  echo "Error! File not found!"
-else:
-  source ~/.de
-fi
-
 RED="\e[31m"
 CYAN="\e[36m"
 YELLOW="\e[33m"
@@ -25,6 +19,12 @@ function fail {
     exit 1
 }
 
+if [ ! -f ~/.de ]
+then
+    fail
+else:
+    source ~/.de
+fi
 # Default options
 reconnect=false
 if ifconfig en3 &>/dev/null; then ethernet=true; else ethernet=false; fi
