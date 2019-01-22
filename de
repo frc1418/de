@@ -1,10 +1,5 @@
 #!/usr/bin/env bash
 
-# You should set the following environment variables:
-#   $DE_START_NETWORK_PSK: Password/PSK of your current network
-#   $DE_ROBOT_NETWORK_PSK: ...of your robot network
-#   $DE_ROBOT_NETWORK_SSID: The SSID of your robot's network
-
 RED="\e[31m"
 CYAN="\e[36m"
 YELLOW="\e[33m"
@@ -23,6 +18,12 @@ function fail {
     fi
     exit 1
 }
+
+if [ ! -f ~/.de ]; then
+    fail "No config found."
+else
+    source ~/.de
+fi
 
 # Default options
 reconnect=false
