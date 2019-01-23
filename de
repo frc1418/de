@@ -18,9 +18,19 @@ function fail {
     fi
     exit 1
 }
+function store_variable {
+    echo "$1"
+    echo -n "${2}=" >> ~/.de
+    read ${2}
+    echo "${!2}" >> ~/.de
+}
 
 if [ ! -f ~/.de ]; then
-    fail "No config found."
+    echo "No config file found. Creating one for you"
+    touch ~/.de
+    store_variable "Input the passcode of your origin network." "start_network_psk"
+    store_variable "Input the name of your robot's network." "robot_network"
+    store_variable "Input the passcode of your robot's network." "robot_network_psk"
 else
     source ~/.de
 fi
@@ -29,10 +39,6 @@ fi
 reconnect=false
 if ifconfig en3 &>/dev/null; then ethernet=true; else ethernet=false; fi
 tests=true
-
-# Run config script
-if [ ! -f ~/.dep ]; then touch ~/.dep; fi
-source ~/.dep
 
 # Parse flags
 while :; do
@@ -58,12 +64,7 @@ if [[ -n "$(git status --porcelain)" ]]; then
     git status --short
 fi
 
-if [[ -z "$DE_START_NETWORK_PSK" ]]; then warn "\$DE_START_NETWORK_PSK not set."; fi
-if [[ -z "$DE_ROBOT_NETWORK_PSK" ]]; then warn "\$DE_ROBOT_NETWORK_PSK not set."; fi
-if [[ -z "$DE_ROBOT_NETWORK_SSID" ]]; then warn "\$DE_ROBOT_NETWORK_SSID not set."; fi
-
 start_network=$(networksetup -getairportnetwork en0 | cut -d ' ' -f 4)
-robot_network=$DE_ROBOT_NETWORK_SSID
 
 cur_ip=$(ifconfig | grep -Eo 'inet (addr:)?([0-9]*\.){3}[0-9]*' | grep -Eo '([0-9]*\.){3}[0-9]*' | grep -v '127.0.0.1')
 rio_ip=$(cut -d '.' -f1-3 <<< $cur_ip).2
@@ -82,10 +83,10 @@ if $ethernet; then
     ping -c 1 -t 1 $rio_ip >/dev/null
     if [ $? = 0 ]; then succ; else fail; fi
 fi
-connect $robot_network $DE_ROBOT_NETWORK_PSK
+connect $robot_network $robot_network_psk
 if $tests; then
     python3 robot/robot.py deploy
 else
     python3 robot/robot.py deploy --skip-tests
 fi
-if $reconnect; then connect $start_network $DE_START_NETWORK_PSK; fi
+if $reconnect; then connect $start_network $start_network_psk; fi
