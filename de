@@ -21,16 +21,16 @@ function fail {
 function store_variable {
     echo "$1"
     echo -n "${2}=" >> ~/.de
-    read ${2}
+    if ${3}; then read -s ${2}; else read ${2}; fi
     echo "${!2}" >> ~/.de
 }
 
 if [ ! -f ~/.de ]; then
     echo "No config file found. Creating one for you"
     touch ~/.de
-    store_variable "Input the passcode of your origin network." "start_network_psk"
-    store_variable "Input the name of your robot's network." "robot_network"
-    store_variable "Input the passcode of your robot's network." "robot_network_psk"
+    store_variable "Input the passcode of your origin network." "start_network_psk" true
+    store_variable "Input the name of your robot's network." "robot_network" false
+    store_variable "Input the passcode of your robot's network." "robot_network_psk" true
 else
     source ~/.de
 fi
